@@ -1,8 +1,39 @@
 #include <QCoreApplication>
+#include <string>
+#include "Menu.h"
 
-int main(int argc, char *argv[])
+using namespace std;
+
+int main()
 {
-    QCoreApplication a(argc, argv);
+    while(true){
+        Menu menu1;
+        menu1.menuRed();
 
-    return a.exec();
+        int opcionesRed[] = {1, 2, 3};
+
+        int opcionRed = menu1.validarOpcion(opcionesRed, 3);
+
+        cout << endl;
+
+        if(opcionRed == 1){
+            while(true){
+                Menu menu2;
+                menu2.menuLinea();
+
+                int opcionesLinea[] = {1, 2, 3, 4, 5, 6};
+
+                int opcionLinea = menu2.validarOpcion(opcionesLinea, 6);
+            }
+        }
+        else if(opcionRed == 2){
+            cout << "De momenot no hay lineas, ni estaciones creadas" << endl ; //cuando se hacen verificaciones, este es ek mensaje a mostrar
+        }
+        else{
+            break;
+        }
+
+    }
+
+    return 0;
 }
