@@ -10,7 +10,7 @@ class red
 private:
     string nombre;
     linea** lineasRed; //Arreglo de punteros
-    int tamLineasRed; //Tamaño inicial con que inicia la red
+    int tamLineasRed; //Cantidad de lineas en la red
 
 public:
     red(string); // constructor
@@ -21,10 +21,11 @@ public:
     int getLineasRed() const;
     string getNombre() const;
 
-     //metodos
+    //metodos
     bool verificarLinea(string&);
-    void apmliarLineasRed();
+    void apmliarLineasRed(); //Amplia el arreglo de punteros y actualiza el tamaño del arreglo
     void agregarLinea(string&);
+    void listarLineas();
 
 };
 

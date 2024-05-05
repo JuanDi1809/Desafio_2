@@ -6,7 +6,7 @@ red::red(string _nombre): nombre(_nombre), tamLineasRed(0) {}
 
 red::~red(){
 
-    for (int i = 0; i < tamLineasRed; ++i) {
+    for (short int i = 0; i < tamLineasRed; ++i) {
         delete lineasRed[i]; // Liberar cada objeto del arreglo
     }
     delete[] lineasRed; // Liberar el arreglo en sí
@@ -23,7 +23,7 @@ string red::getNombre() const{
 bool red::verificarLinea(string& nombre){
 
     //Recorrido por los nombres de las lineas para verificar si ya existe
-    for(int i = 0; i < tamLineasRed; i++ ){
+    for(short int i = 0; i < tamLineasRed; i++ ){
         if(lineasRed[i]->obtenerNombre() == nombre){
             return true;
         }
@@ -50,4 +50,10 @@ void red::apmliarLineasRed(){
 
 void red::agregarLinea(string& name){
     lineasRed[tamLineasRed - 1] = new linea(name);
+}
+
+void red::listarLineas(){
+    for(short int i = 0; i < tamLineasRed; i++){
+        cout << i + 1 << ". " << lineasRed[i]->obtenerNombre() << endl;
+    }
 }
