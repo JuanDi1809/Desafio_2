@@ -2,6 +2,8 @@
 #include "menu.h"
 #include <string>
 
+using namespace std;
+
 void Menu::menuRed(){
     cout << "Menu red: " << endl;
     cout << "1. Crear red metro" << endl;
@@ -31,7 +33,7 @@ void Menu::menuEstaciones(){
 int Menu::validarOpcion(int opcionesValidas[], int tam){
     while(true){
         try{
-            string opcionAux; //El datos es de tipo a string porque asi el usuario cuando ingrese datos que no son, no me generen problemas
+            string opcionAux; //El datos es de tipo a string porque asi el usuario cuando ingrese datos que no son, no me generen problemas, la verificaion es despues
 
             cout << "Ingresa una opcion: ";
             getline(cin, opcionAux);
