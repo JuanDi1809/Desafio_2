@@ -23,6 +23,8 @@ public:
     //retorna el primer nombre de la estacion de la linea
     string getEstacionInicial();
 
+    string getEstacionFinal();
+
     //getter que devuelve el objeto estacion
     Estacion* getObjetoEstacion(const string& nombreEstacion);
 

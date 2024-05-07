@@ -109,11 +109,40 @@ int main(){
                                 Estacion *estacionAmodificar = linea->getObjetoEstacion(estacionInicial);
 
                                 if(opcionMenuUbicaion == 1 ){
-                                    cout << "Agregar al inicio";
+                                    int tiempoSiguiente;
+                                    cout << "Establece el tiempo de la estacion " << nombreEstacion << " a " << estacionAmodificar->getNombreEstacion();
+                                    cin >> tiempoSiguiente;
+
+                                    //actualizar tiempos de manera simultanea
+                                    linea->ampliarListaEstaciones();
+                                    linea->agregarEstacionInicio(nombreEstacion, false, 0, tiempoSiguiente);
+
+                                    //se cambia el tiempo anterior de la estacion que se modifica a el tiempo siguiente
+                                    estacionAmodificar->setTanterior(tiempoSiguiente);
+                                    cout << "los tiempos se modificaron exitosamente"<<endl;
+
+                                    /*
+                                    Estacion *prueba = linea->getObjetoEstacion(nombreEstacion);
+                                    cout << estacionAmodificar->getNombreEstacion() << " tiempo anterior: " << estacionAmodificar->getAnterior() << endl;
+                                    cout << prueba->getNombreEstacion() << " tiempo siguiente: " << prueba->getSiguiente()<< endl;
+                                    cout << prueba->getNombreEstacion() << " tiempo anterior: " << prueba->getAnterior()<< endl;
+                                    cout << estacionAmodificar->getNombreEstacion() << "tiempo siguiente: " << estacionAmodificar->getSiguiente() <<endl;*/
                                     break;
                                 }
                                 else if(opcionMenuUbicaion == 2){
-                                    cout << "Al final";
+                                    string nuevaEstacion;
+                                    int tAnterior;
+                                    cout << "Ingresa el nombre de la estacion a agregar: ";cin>>nuevaEstacion;
+
+                                    //se piden los tiempos y luego se el pasan al metodo agregar estacion
+                                    string estacionFinal = linea->getEstacionFinal();
+                                    Estacion *estacionModificar = linea->getObjetoEstacion(estacionFinal);
+
+                                    cout << "ingresa el tiempo de la estacion " << estacionModificar->getNombreEstacion() << " a " << nuevaEstacion; cin >> tAnterior;
+                                    estacionModificar->setTsiguiente(tAnterior);
+
+                                    linea->ampliarListaEstaciones();
+                                    linea->agregarEstacionInicio(nombreEstacion, false, tAnterior, 0);
                                     break;
                                 }
                                 else{

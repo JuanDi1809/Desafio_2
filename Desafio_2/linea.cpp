@@ -95,9 +95,15 @@ void Linea::agregarEstacionInicio(const string& nombreEstacion, bool esTransicio
         listaEstaciones[cantEstaciones] = new Estacion(nombreEstacion, esTransicion, tAnterior, tSiguiente);
     }
     else{
-
+        //malparido augusto
+        Estacion *temp = listaEstaciones[0];
+        listaEstaciones[0] = new Estacion(nombreEstacion, esTransicion, tAnterior, tSiguiente);
+        listaEstaciones[1] = temp;
     }
     cantEstaciones++;
+}
+void Linea::agregarEstacionFinal(){
+    //nada
 }
 
 void Linea::listarEstaciones(){
@@ -115,5 +121,9 @@ Estacion* Linea::getObjetoEstacion(const string& nombreEstacion){
 }
 string Linea::getEstacionInicial(){
     return listaEstaciones[0]->getNombreEstacion();
+}
+
+string Linea::getEstacionFinal(){
+    return listaEstaciones[cantEstaciones]->getNombreEstacion();
 }
 
