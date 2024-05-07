@@ -1,59 +1,130 @@
 #include "red.h"
-#include <iostream>
-using namespace std;
+#include "linea.h"
 
-red::red(string _nombre): nombre(_nombre), tamLineasRed(0) {}
+Red::Red(string const& _nombreRed): nombreRed(_nombreRed), listaLineas(nullptr), cantLineas(0) {}
 
-red::~red(){
-
-    for (short int i = 0; i < tamLineasRed; ++i) {
-        delete lineasRed[i]; // Liberar cada objeto del arreglo
+Red::~Red(){
+    for(int i = 0; i < cantLineas; i++){
+        delete listaLineas[i];
     }
-    delete[] lineasRed; // Liberar el arreglo en sí
+    delete[] listaLineas;
 }
 
-int red::getLineasRed() const{
-    return tamLineasRed;
+string Red::getNombreRed() const{
+    return nombreRed;
 }
 
-string red::getNombre() const{
-    return nombre;
+int Red::getCantLineas() const{
+    return cantLineas;
 }
 
-bool red::verificarLinea(string& nombre){
-
-    //Recorrido por los nombres de las lineas para verificar si ya existe
-    for(short int i = 0; i < tamLineasRed; i++ ){
-        if(lineasRed[i]->obtenerNombre() == nombre){
-            return true;
+Linea* Red::getObjetoLinea(const string& nombreLinea){
+    for(int i = 0; i < cantLineas; i++){
+        if(listaLineas[i]->getNombreLinea() == nombreLinea){
+            return listaLineas[i];
         }
     }
-    return false;
 }
 
-void red::apmliarLineasRed(){
-    int nuevaFila = tamLineasRed + 1;
-    linea** nuevaLineasRed = new linea*[nuevaFila];
+string Red::getPrimeraLinea() const{
+    return listaLineas[0]->getNombreLinea();
+}
 
-    //Copiar los punteros existentes de la matriz original a la nueva matriz
-    //Se verifica que sea diferente de cero porque si no, generaria un problema de indexacion
-    if(tamLineasRed != 0){
-        for (int i = 0; i < nuevaFila; ++i) {
-            nuevaLineasRed[i] = lineasRed[i]; // Copia los punteros existentes (si los hay)
+string Red::verificarLinea(){
+    string nombreLinea;
+
+    while(true){
+        try{
+            cout << "Ingresa el nombre de la linea: ";
+            getline(cin, nombreLinea);
+
+            for (int i = 0; i < cantLineas; i++) {
+                if (listaLineas[i]->getNombreLinea()== nombreLinea) {
+                    throw invalid_argument("esta estacion ya existe");
+                }
+            }
+            break;
+        }
+        catch(const exception& ex){
+            cerr << "Error: " << ex.what() << endl;
         }
     }
 
-    //Hago la copia de el nuevo arreglo
-    lineasRed = nuevaLineasRed;
-    tamLineasRed++;
+    return nombreLinea;
 }
 
-void red::agregarLinea(string& name){
-    lineasRed[tamLineasRed - 1] = new linea(name);
+string Red::verificarLinea2(){
+    string nombreLinea;
+    bool valido = true;
+
+    while(valido){
+        try{
+            cout << "Ingresa el nombre de la linea: ";
+            getline(cin, nombreLinea);
+
+            int i;
+            for (i = 0; i < cantLineas; i++) {
+                if (listaLineas[i]->getNombreLinea() == nombreLinea) {
+                    valido = false;
+                    break;
+                }
+            }
+            if(i == cantLineas) throw invalid_argument("esta estacion no existe");
+        }
+        catch(const exception& ex){
+            cerr << "Error: " << ex.what() << endl;
+        }
+    }
+
+    return nombreLinea;
 }
 
-void red::listarLineas(){
-    for(short int i = 0; i < tamLineasRed; i++){
-        cout << i + 1 << ". " << lineasRed[i]->obtenerNombre() << endl;
+
+void Red::agregarLinea(const string& nombreLinea){
+    int nuevaCapacidad = cantLineas + 1 ;
+    Linea** nuevasLineas = new Linea*[nuevaCapacidad];
+
+    //Copiamos las estaciones existentes al nuevo arreglo
+    for(int i = 0; i < cantLineas; i++){
+        nuevasLineas[i] = listaLineas[i];
+    }
+
+    //Liberamos la memoria del antiguo arreglo de punteros
+    delete[] listaLineas;
+
+    //Actualizamos los punteros
+    listaLineas = nuevasLineas;
+
+    listaLineas[cantLineas] = new Linea(nombreLinea);
+
+    cantLineas++;
+}
+
+
+bool Red::verificarEstacionesLinea(){
+    if(cantLineas == 0){
+        return true;
+    }
+    else if(listaLineas[cantLineas - 1]->getCantEstaciones() == 0){
+        return false;
+    }
+    else{
+        return true;
     }
 }
+
+void Red::listarLineas(){
+    for(int i = 0; i < cantLineas; i++ ){
+        cout << i + 1 << ". " << listaLineas[i]->getNombreLinea() << endl;
+    }
+}
+
+void Red::listarLineas2(const string& nombreLinea){
+    for(int i = 0; i < cantLineas; i++){
+        if(listaLineas[i]->getNombreLinea() != nombreLinea){
+            cout << i + 1 << ". " << listaLineas[i]->getNombreLinea() << endl;
+        }
+    }
+}
+
+

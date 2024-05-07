@@ -1,59 +1,32 @@
 #include "estacion.h"
-#include <iostream>
 #include <string>
 
-using namespace std;
+Estacion::Estacion(const string& _nombreEstacion,bool _esTransicion, int _tAnterior,int _tSiguiente): nombreEstacion(_nombreEstacion), esTransicion(_esTransicion), tAnterior(_tAnterior), tSiguiente(_tSiguiente) {}
 
-Estacion::Estacion(string _nombreEstacion):nombreEstacion(_nombreEstacion), tiempoAnterior(0), tiempoSiguiente(0), esTransicion(false), longitudArray(0), numLineas(0){}
-
-Estacion::~Estacion(){
-    delete[] lineas;
-}
+Estacion::~Estacion(){}
 
 string Estacion::getNombreEstacion() const{
     return nombreEstacion;
 }
 
-int Estacion::getTiempoAnterior() const{
-    return tiempoAnterior;
+bool Estacion:: getEsTransicion() const{
+    return esTransicion;
 }
 
-int Estacion::getTiempoSiguiente() const{
-    return tiempoSiguiente;
+int Estacion::getAnterior() const{
+    return tAnterior;
 }
 
-
-void Estacion::setTiempoAnterior(int nuevoTiempo){
-    tiempoAnterior = nuevoTiempo;
+int Estacion::getSiguiente() const{
+    return tSiguiente;
 }
 
-void Estacion::setTiempoSiguiente(int nuevoTiempo){
-    tiempoSiguiente = nuevoTiempo;
+void Estacion::setEsTransicion(){
+    esTransicion = true;
 }
-
-void Estacion::setEstacionTransicion(){
-    estacionTransicion = true;
+void Estacion::setTanterior(int tiempo){
+    tAnterior = tiempo;
 }
-
-void Estacion::mostrarTiempoAnterior(string anterior, string actual ){
-    cout << "El tiempo de la estacion " << actual << " a la estacion " << anterior << " es " << tiempoAnterior;
-}
-
-void Estacion::mostrarTiempoSiguiente(string actual, string siguiente){
-    cout << "El tiempo de la estacion " << actual << " a la estacion " << siguiente << " es " << tiempoSiguiente;
-}
-
-void Estacion::lineasDePertenencia(const string &nombreLinea){
-    longitudArray += 1;
-    string *tempArray = new string[longitudArray];
-
-    for (int i = 0; i < numLineas; ++i) {
-        tempArray[i] = lineas[i];
-    }
-
-    delete[] lineas;
-    lineas = tempArray;
-
-    numLineas++;
-    lineas[numLineas - 1] = nombreLinea;
+void Estacion::setTsiguiente(int tiempo){
+    tSiguiente = tiempo;
 }

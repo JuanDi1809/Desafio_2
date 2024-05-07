@@ -4,10 +4,11 @@
 class Menu
 {
 public:
+    void menuPrincipal();
     void menuRed();
     void menuLinea();
-    void menuEstaciones();
-    int validarOpcion(int opcionesValidas[], int tam);
+    void menuUbicacion();
+    int validarOpcion(int);
 };
 
 #endif // MENU_H

@@ -1,118 +1,64 @@
 #include <iostream>
 #include <string>
-#include "menu.h"
 #include "red.h"
+#include "menu.h"
+#include "linea.h"
+#include "estacion.h"
+
 
 using namespace std;
 
-int main()
-{
+int main(){
+
+    string nombreRed;
+
+    cout << "Bienvenido a la simulacion de una red metro\n";
+    cout << "Escribe el nombre de la red: ";
+    getline(cin,nombreRed);
+
+    Red r1(nombreRed);
+
     while(true){
         Menu menu1;
-        menu1.menuRed();
 
-        int opcionesRed[] = {1, 2, 3};
-        int opcionRed = menu1.validarOpcion(opcionesRed, 3);
+        menu1.menuPrincipal();
+        int opcionMenuPrincipal = menu1.validarOpcion(3);
 
-        cout << endl;
-
-        if(opcionRed == 1){
-            string nombreRed;
-            cout << "Ingresa el nombre de la red: ";
-
-            getline(cin,nombreRed);
-            red r1(nombreRed);
+        if(opcionMenuPrincipal == 1){
 
             while(true){
-
                 Menu menu2;
 
-                menu2.menuLinea();
+                menu2.menuRed();
+                int opcionMenuRed = menu2.validarOpcion(5);
 
-                int opcionesLinea[] = {1, 2, 3, 4, 5, 6};
-                int opcionLinea = menu2.validarOpcion(opcionesLinea, 6);
-
-                if(opcionLinea == 1){ //Agregar linea
-
-                    string nombreLinea;
-                    bool valido;
-
-                    do{
-                        try{
-                            cout << "Ingresa el nombre de la linea: ";
-                            getline(cin, nombreLinea);
-
-                            valido = r1.verificarLinea(nombreLinea);
-
-                            if(valido) throw invalid_argument("esta estacion ya existe");
-
-                        }catch(const exception& ex){
-                            cerr << "Error: " << ex.what() << endl;
-                        }
-                    }while(valido);
-
-                    r1.apmliarLineasRed();
-                    r1.agregarLinea(nombreLinea);
-
-                }
-                else if(opcionLinea == 2){ //Eliminar linea
-
-                    if(r1.getLineasRed() == 0){
-                        cout << "ADVERTENCIA: No hay lineas creadas en la red. Ingrese primeros las lineas y sus respectivas estaciones" << endl;
-                        cout << endl;
+                if(opcionMenuRed == 1){//Agregar linea
+                    if(r1.verificarEstacionesLinea()){
+                        string nombreLinea =r1.verificarLinea();
+                        r1.agregarLinea(nombreLinea);
                     }
                     else{
-                        //Toca verificar que la linea que escogio para eliminar no tenga estaciones de transicion
-                        cout << "Proceso para eliminar linea";
+                        cout << "ADVERTENCIA: no puedes crear otra linea sin que la linea que creaste anteriormente tenga estaciones\n";
                     }
                 }
-                else if(opcionLinea == 3){ //Cantidad de lineas
-                    cout <<"Hay "<< r1.getLineasRed() << " lineas en la red " << r1.getNombre() << endl;
-                    cout << endl;
+                else if(opcionMenuRed == 2){//Eliminar linea
+                    if(r1.getCantLineas() == 0){
+                        cout << "ADVERTENCIA: aun no hay lineas creadas";
+                    }
+                    else{
+                        cout << "Proceso para eliminar";
+                    }
                 }
-                else if(opcionLinea == 4){ //Cantidad de estaciones
-                    cout << "Cantidad de estaciones en la red";
+                else if(opcionMenuRed == 3){//Lineas en la red
+                    cout << "En la red " << r1.getNombreRed() << " hay " << r1.getCantLineas() << " lineas\n";
                 }
-                else if(opcionLinea == 5){
-                    while(true){
-                        Menu menu3;
-
-                        menu3.menuEstaciones();
-
-                        int opcionesEstacion[] = {1, 2, 3, 4};
-                        int opcionEstacion = menu3.validarOpcion(opcionesEstacion, 4);
-
-                        if(opcionEstacion == 1){ //Agregar estacion de una linea
-                            if(r1.getLineasRed() == 0){
-                                cout << "ADVERTENCIA: No hay lineas creadas en la red. Ingrese primeros las lineas y sus respectivas estaciones" << endl;
-                                cout << endl;
-                            }
-                            else{
-                                cout << "En que linea deseas agregar la estacion: " << endl;
-                                r1.listarLineas();
-                            }
-                        }
-                        else if(opcionEstacion == 2){ //Elimina estacion de una linea
-                            if(r1.getLineasRed() == 0){
-                                cout << "ADVERTENCIA: No hay lineas creadas en la red. Ingrese primeros las lineas y sus respectivas estaciones" << endl;
-                                cout << endl;
-                            }
-                            else{
-                                cout << "Proceso para eliminar estacion de una linea";
-                            }
-                        }
-                        else if(opcionEstacion == 3){ //cantidad de estaciones de una linea
-                            if(r1.getLineasRed() == 0){
-                                cout << "ADVERTENCIA: No hay lineas creadas en la red. Ingrese primeros las lineas y sus respectivas estaciones" << endl;
-                                cout << endl;
-                            }
-                            else{
-                                cout << "Proceso para cantidad de estaciones de una linea ";
-                            }
-                        }
-                        else{ //Vulve al menu de linea
-                            break;
-                        }
+                else if(opcionMenuRed == 4){//Estaciones en la red
+                    if(r1.getCantLineas() == 0){
+                        cout << "ADVERTENCIA: aun no hay lineas creadas";
+                    }
+                    else{
+                        //Hay que tener cuidado con las estaciones de transicion
+                        cout << "Estaciones en la red";
                     }
                 }
                 else{
@@ -120,12 +66,128 @@ int main()
                 }
             }
         }
-        else if(opcionRed == 2){
-            cout << "De momenot no hay lineas, ni estaciones creadas" << endl ; //cuando se hacen verificaciones, este es el mensaje a mostrar
+        else if(opcionMenuPrincipal == 2){
+
+            while(true){
+                Menu menu3;
+
+                menu3.menuLinea();
+                int opcionMenuLinea = menu3.validarOpcion(4);
+
+                if(opcionMenuLinea == 1){//Agregar estacion
+                    cout << "Escoge la linea a donde va a pertencer la estacion\n";
+                    r1.listarLineas();
+
+                    string nombreLinea = r1.verificarLinea2();
+
+                    Linea* linea = r1.getObjetoLinea(nombreLinea);
+
+
+                    if(r1.getPrimeraLinea() == linea->getNombreLinea()){
+                        if(linea->getCantEstaciones() == 0){
+                            string nombreEstacion;
+
+                            cout << "Ingrese el nombre de la estacion: ";
+                            getline(cin,nombreEstacion);
+
+
+                            linea->ampliarListaEstaciones();
+                            linea->agregarEstacionInicio(nombreEstacion, false, 0, 0);
+                        }
+                        else{
+                            string nombreEstacion = linea->verificarEstacion1();
+
+                            while(true){
+                                Menu menu4;
+
+                                cout << "Como quieres agregar la estacion?\n";
+                                menu4.menuUbicacion();
+                                int opcionMenuUbicaion = menu4.validarOpcion(3);
+
+                                //se llama el objeto estacion xd
+                                string estacionInicial = linea->getEstacionInicial();
+                                Estacion *estacionAmodificar = linea->getObjetoEstacion(estacionInicial);
+
+                                if(opcionMenuUbicaion == 1 ){
+                                    cout << "Agregar al inicio";
+                                    break;
+                                }
+                                else if(opcionMenuUbicaion == 2){
+                                    cout << "Al final";
+                                    break;
+                                }
+                                else{
+                                    if(linea->getCantEstaciones() >= 2){
+                                        cout << "En medio de dos estaciones";
+                                        break;
+                                    }
+                                    else{
+                                        cout << "ADVERTENCIA: no hay mas de dos estaciones creadas en la linea " << linea->getNombreLinea() << endl;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else{
+                        if(linea->getCantEstaciones() == 0){
+                            cout << "Seleccina linea con la que se conecta " << linea->getNombreLinea() << endl;
+                            r1.listarLineas2(nombreLinea);
+
+                            string nombreLineaConexion = r1.verificarLinea2();
+
+                            Linea* lineaConexion = r1.getObjetoLinea(nombreLineaConexion);
+
+                            lineaConexion->listarEstaciones();
+                            string nombreEstacionConexion = lineaConexion->verificarEstacion2();
+
+                            Estacion *estacionAgregada = lineaConexion-> getObjetoEstacion(nombreEstacionConexion);
+
+                            if(estacionAgregada->getEsTransicion()){
+                                lineaConexion->ampliarListaEstaciones();
+                                lineaConexion->agregarEstacionInicio(nombreEstacionConexion, true, 0, 0);
+                            }else{
+                                estacionAgregada->setEsTransicion();
+                            }
+                        }
+                        else{
+                            cout << "Nombre estacion";
+                            while(true){
+                                Menu menu4;
+
+                                menu4.menuUbicacion();
+                                int opcionMenuUbicaion = menu4.validarOpcion(3);
+
+                                if(opcionMenuUbicaion == 1 ){
+                                    cout << "Agregar al inicio";
+                                    break;
+                                }
+                                else if(opcionMenuUbicaion == 2){
+                                    cout << "Al final";
+                                    break;
+                                }
+                                else{
+                                    if(linea->getCantEstaciones() >= 2){
+                                        cout << "En medio de dos estaciones";
+                                        break;
+                                    }
+                                    else{
+                                        cout << "ADVERTENCIA: no hay mas de dos estaciones creadas\n";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else if(opcionMenuLinea == 4){
+                    break;
+                }
+
+            }
         }
         else{
             break;
         }
     }
+
     return 0;
 }

@@ -1,0 +1,20 @@
+#include "linea.h"
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+Linea::Linea(string _nombre): nombre(_nombre), numEstaciones(0) {}
+
+Linea::Linea(){
+    for (int i = 0; i < numEstaciones; i++) {
+        delete listaEstaciones[i];
+    }
+    delete[] listaEstaciones;
+}
+
+string Linea::obtenerNombre() const {
+    return nombre;
+}
+
+

@@ -4,33 +4,36 @@
 
 using namespace std;
 
+void Menu::menuPrincipal(){
+    cout << "MENU PRINCIPAL:\n";
+    cout << "1. Menu red\n";
+    cout << "2. Menu linea\n";
+    cout << "3. Salir\n";
+}
+
 void Menu::menuRed(){
-    cout << "Menu red: " << endl;
-    cout << "1. Crear red metro" << endl;
-    cout << "2. Funcinamiento de la red" << endl;
-    cout << "3. Salir del sistema" << endl;
+    cout << "MENU RED:\n";
+    cout << "1. Agregar una linea a la red Metro\n";
+    cout << "2. Eliminar una linea de la red Metro\n";
+    cout << "3. Saber cuantas lineas tiene la red Metro\n";
+    cout << "4. Saber cuantas estaciones tiene la red Metro\n";
+    cout << "5. Volver al menu principal\n";
 }
 
 void Menu::menuLinea(){
-    cout << "Menu linea: " << endl;
-    cout << "1. Agregar linea" << endl;
-    cout << "2. Eliminar linea" << endl;
-    cout << "3. Cantidad de lineas en la red" << endl;
-    cout << "4. Cantidad de estaciones en la red" << endl;
-    cout << "5. Menu estaciones" << endl;
-    cout << "6. volver a menu red" << endl;
+    cout << "MENU LINEA:\n";
+    cout << "1. Agregar una estacion a una linea\n";
+    cout << "2. Eliminar una estacion de una linea\n";
+    cout << "3. Saber cuantas estaciones tiene una linea\n";
+    cout << "4. Volver al menu principal\n";
 }
 
-void Menu::menuEstaciones(){
-    cout << "Menu estaciones: " << endl;
-    cout << "1. Agregar estacion a una linea" << endl;
-    cout << "2. Eliminar estacion de una linea" << endl;
-    cout << "3. Saber  cantidad de estaciones de una linea" << endl;
-    cout << "4. Volver a menu linea" << endl;
+void Menu::menuUbicacion(){
+    cout << "1. Al inicio\n";
+    cout << "2. Al final\n";
+    cout << "3. En medio de dos estaciones\n";
 }
-
-
-int Menu::validarOpcion(int opcionesValidas[], int tam){
+int Menu::validarOpcion( int tam){
     while(true){
         try{
             string opcionAux; //El datos es de tipo a string porque asi el usuario cuando ingrese datos que no son, no me generen problemas, la verificaion es despues
@@ -43,8 +46,8 @@ int Menu::validarOpcion(int opcionesValidas[], int tam){
 
             int opcion = stoi(opcionAux);
 
-            for(int i = 0; i < tam; i++){
-                if(opcionesValidas[i] == opcion){
+            for(int i = 1; i <= tam; i++){
+                if(i == opcion){
                     return opcion;
                 }
             }
@@ -57,3 +60,4 @@ int Menu::validarOpcion(int opcionesValidas[], int tam){
         }
     }
 }
+

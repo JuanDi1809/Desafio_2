@@ -8,42 +8,33 @@ using namespace std;
 
 class Estacion
 {
+
 private:
     string nombreEstacion;
-    string nombreLinea;
     bool esTransicion;
-    int tiempoAnterior;
-    int tiempoSiguiente;
-
-    int longitudArray;
-    int numLineas;
-    string *lineas; //solo será modificada cuando es de transición
+    int tAnterior;
+    int tSiguiente;
 
 public:
 
     //Constructor
-    Estacion(string);
+    Estacion(const string&, bool, int, int);
 
-    //destructor
+    //Destructor
     ~Estacion();
 
-    //getters
+    //Getters
     string getNombreEstacion() const;
-    int getTiempoAnterior() const;
-    int getTiempoSiguiente() const;
+    bool getEsTransicion() const;
+    int getAnterior() const;
+    int getSiguiente() const;
 
-    //Setters
-    void setEstacionTransicion();
-    void setTiempoAnterior(int);
-    void setTiempoSiguiente(int);
+    //setter
+    void setEsTransicion();
+    void setTanterior(int);
+    void setTsiguiente(int);
 
-    //Metodos
 
-    //Me permite mostrar los tiempos respectos a sus estaciones vecinas
-    void mostrarTiempoAnterior(string,string);
-    void mostrarTiempoSiguiente(string, string);
-
-    void lineasDePertenencia(const string &nombreLinea);
 };
 
 #endif // ESTACION_H
