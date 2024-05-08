@@ -1,5 +1,6 @@
 #include "red.h"
 #include "linea.h"
+#include <limits>
 
 Red::Red(string const& _nombreRed): nombreRed(_nombreRed), listaLineas(nullptr), cantLineas(0) {}
 
@@ -38,6 +39,10 @@ string Red::verificarLinea(){
             cout << "Ingresa el nombre de la linea: ";
             getline(cin, nombreLinea);
 
+            // Limpiar el búfer de entrada antes de usar getline nuevamente
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
             for (int i = 0; i < cantLineas; i++) {
                 if (listaLineas[i]->getNombreLinea()== nombreLinea) {
                     throw invalid_argument("esta estacion ya existe");
@@ -61,6 +66,10 @@ string Red::verificarLinea2(){
         try{
             cout << "Ingresa el nombre de la linea: ";
             getline(cin, nombreLinea);
+
+            // Limpiar el búfer de entrada antes de usar getline nuevamente
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
             int i;
             for (i = 0; i < cantLineas; i++) {
@@ -126,5 +135,18 @@ void Red::listarLineas2(const string& nombreLinea){
         }
     }
 }
+void Red::eliminarLinea(const string& nombrelinea){
+    Linea **nuevaLista = new Linea*[cantLineas];
 
+    for(int i = 0; i < cantLineas; i++){
+        if(nombrelinea != listaLineas[i]->getNombreLinea()){
+            nuevaLista[i] = listaLineas[i];
+        }else{
+            i++;
+        }
+    }
+    cantLineas--; //se disminiye la cantidad de lineas
+    delete[] listaLineas;
+    listaLineas = nuevaLista;
+}
 

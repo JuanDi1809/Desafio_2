@@ -1,6 +1,7 @@
 #include "linea.h"
 #include "estacion.h"
 #include <string>
+#include <limits>
 
 using namespace std;
 
@@ -32,6 +33,10 @@ string Linea::verificarEstacion1(){
             cout << "Ingresa el nombre de la Estacion: ";
             getline(cin, nombreEstacion);
 
+            // Limpiar el búfer de entrada antes de usar getline nuevamente
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
             for (int i = 0; i < cantEstaciones; i++) {
                 if (listaEstaciones[i]->getNombreEstacion()== nombreEstacion) {
                     throw invalid_argument("esta estacion ya existe");
@@ -55,6 +60,10 @@ string Linea::verificarEstacion2(){
         try{
             cout << "Ingresa el nombre de la estacion: ";
             getline(cin, nombreEstacion);
+
+            // Limpiar el búfer de entrada antes de usar getline nuevamente
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
             int i;
             for (i = 0; i < cantEstaciones; i++) {
@@ -95,21 +104,44 @@ void Linea::agregarEstacionInicio(const string& nombreEstacion, bool esTransicio
         listaEstaciones[cantEstaciones] = new Estacion(nombreEstacion, esTransicion, tAnterior, tSiguiente);
     }
     else{
-        //malparido augusto
+
         Estacion *temp = listaEstaciones[0];
         listaEstaciones[0] = new Estacion(nombreEstacion, esTransicion, tAnterior, tSiguiente);
         listaEstaciones[1] = temp;
     }
     cantEstaciones++;
 }
-void Linea::agregarEstacionFinal(){
-    //nada
+void Linea::agregarEstacionFinal(const string& nombreEstacion, bool esTransicion, int tAnterior, int tSiguiente){
+    listaEstaciones[cantEstaciones] = new Estacion(nombreEstacion, esTransicion, tAnterior, tSiguiente);
+    cantEstaciones++;
+}
+
+/*
+void Linea::agregarEstacionMedio(const string& nombreEstacion, bool esTransicion, int tAnterior, int tSiguiente, const string& nombreAnterior){
+    for(int i = 0; i <= cantEstaciones; i++){
+        if(listaEstaciones[i]->getNombreEstacion() == nombreAnterior){
+            Estacion* temp = listaEstaciones[i + 1];
+            listaEstaciones[i+1] = new Estacion(nombreEstacion,esTransicion, tAnterior, tSiguiente);
+        }
+    }
+}
+*/
+
+void Linea::eliminarEstacion(){
+
 }
 
 void Linea::listarEstaciones(){
     for(int i = 0; i < cantEstaciones; i++){
         cout << i + 1 << ". "<< listaEstaciones[i]->getNombreEstacion()<< endl;
     }
+}
+
+void Linea::listarEstaciones2(){
+    for(int i = 1; i < cantEstaciones; i++){
+        cout << i << ". " << listaEstaciones[i - 1]->getNombreEstacion() << "-" << listaEstaciones[i]->getNombreEstacion() << endl;
+    }
+
 }
 
 Estacion* Linea::getObjetoEstacion(const string& nombreEstacion){
@@ -119,11 +151,24 @@ Estacion* Linea::getObjetoEstacion(const string& nombreEstacion){
         }
     }
 }
+
+Estacion* Linea::getObjetoEstacion2(int opcion){
+    return listaEstaciones[opcion - 1];
+}
+
 string Linea::getEstacionInicial(){
     return listaEstaciones[0]->getNombreEstacion();
 }
 
 string Linea::getEstacionFinal(){
-    return listaEstaciones[cantEstaciones]->getNombreEstacion();
+    return listaEstaciones[cantEstaciones - 1]->getNombreEstacion();
+}
+bool Linea::getEstacionTransicion(){
+    for(int i = 0; i < cantEstaciones; i++){
+        if(listaEstaciones[i]->getEsTransicion()){
+            return true;
+        }
+    }
+    return false;
 }
 

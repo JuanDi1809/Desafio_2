@@ -28,14 +28,12 @@ public:
     //Getter paro objeto
     Linea* getObjetoLinea(const string&);
 
+
     //Metodo para verificar que la linea no exista
     string verificarLinea();
 
     //Metodo para verificar que la linea ya exista
     string verificarLinea2();
-
-    //Metodo para ampliar la lista de lineas
-    void agregarLinea(const string&);
 
     //Metodo para verificar si una linea tiene estaciones
     bool verificarEstacionesLinea();
@@ -45,6 +43,13 @@ public:
 
     //Metodo par enlistar lineas con las que se puede conectar
     void listarLineas2(const string&);
+
+    //Metodo para ampliar la lista de lineas y agregar la linea
+    void agregarLinea(const string&);
+
+    //Metodo para eliminar la linea
+    void eliminarLinea(const string&);
+
 };
 
 #endif // RED_H

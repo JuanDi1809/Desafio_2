@@ -1,6 +1,7 @@
 #include <iostream>
 #include "menu.h"
 #include <string>
+#include <limits>
 
 using namespace std;
 
@@ -40,6 +41,10 @@ int Menu::validarOpcion( int tam){
 
             cout << "Ingresa una opcion: ";
             getline(cin, opcionAux);
+
+            //Limpiar el búfer de entrada antes de usar getline nuevamente
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
             if(opcionAux.size() > 1) throw out_of_range("debe ser solo un caracter");
 
