@@ -1,10 +1,10 @@
 #include <iostream>
 #include <string>
+#include <ctime>
 #include "red.h"
 #include "menu.h"
 #include "linea.h"
 #include "estacion.h"
-
 
 using namespace std;
 
@@ -30,7 +30,7 @@ int main(){
                 Menu menu2;
 
                 menu2.menuRed();
-                int opcionMenuRed = menu2.validarOpcion(5);
+                int opcionMenuRed = menu2.validarOpcion(6);
 
                 if(opcionMenuRed == 1){//Agregar linea
                     if(r1.verificarEstacionesLinea()){
@@ -79,6 +79,35 @@ int main(){
                         cout << "Estaciones en la red";
                     }
                 }
+                else if(opcionMenuRed == 5){
+                    time_t now = time(0);
+                    tm* tiempoLocal = localtime(&now);
+
+                    cout << "Escoge la linea en donde quieres realizar la simulacion\n";
+                    r1.listarLineas();
+                    string nombreLinea = r1.verificarLinea2();
+
+                    Linea* linea = r1.getObjetoLinea(nombreLinea);
+
+                    linea->listarEstaciones();
+
+                    cout << "Escoge las estaciones en donde quieres saber su tiempo de recorrido\n";
+                    cout << "PRIMERA ESTACION\n";
+                    string primeraEstacion = linea->verificarEstacion2();
+
+                    cout << "SEGUNDA ESTACION\n";
+                    string segundaEstacion = linea->verificarEstacion2();
+
+                    int tiempo = linea->tiempoEstaciones(primeraEstacion, segundaEstacion);
+
+                    cout << "Hora de salida en la estacion " << primeraEstacion << " es "<< tiempoLocal->tm_hour << ":" << tiempoLocal->tm_min << ":" << tiempoLocal->tm_sec << endl;
+
+                    now += tiempo * 60;
+                    tiempoLocal = localtime(&now);
+
+                    cout << "Hora de llegada a la estacion " << segundaEstacion << " es " << tiempoLocal->tm_hour << ":" << tiempoLocal->tm_min << ":" << tiempoLocal->tm_sec << endl;
+                    cout << "El tiempo de recorrido fue de " << tiempo << " minutos\n";
+                }
                 else{
                     break;
                 }
@@ -109,6 +138,7 @@ int main(){
                             getline(cin,nombreEstacion);
 
 
+
                             linea->ampliarListaEstaciones();
                             linea->agregarEstacionInicio(nombreEstacion, false, 0, 0);
 
@@ -134,20 +164,14 @@ int main(){
                                     cout << "Establece el tiempo de la estacion " << nombreEstacion << " a " << estacionAmodificar->getNombreEstacion() << ": ";
                                     cin >> tiempoSiguiente;
 
-                                    //actualizar tiempos de manera simultanea
-                                    linea->ampliarListaEstaciones();
-                                    linea->agregarEstacionInicio(nombreEstacion, false, 0, tiempoSiguiente);
-
                                     //se cambia el tiempo anterior de la estacion que se modifica a el tiempo siguiente
                                     estacionAmodificar->setTanterior(tiempoSiguiente);
+
+                                    //Se agrega la estacion
+                                    linea->ampliarListaEstaciones();
+                                    linea->agregarEstacionInicio(nombreEstacion, false, 0, tiempoSiguiente);
                                     cout << "La estacion se agrego exitosamente"<<endl;
 
-                                    /*
-                                    Estacion *prueba = linea->getObjetoEstacion(nombreEstacion);
-                                    cout << estacionAmodificar->getNombreEstacion() << " tiempo anterior: " << estacionAmodificar->getAnterior() << endl;
-                                    cout << prueba->getNombreEstacion() << " tiempo siguiente: " << prueba->getSiguiente()<< endl;
-                                    cout << prueba->getNombreEstacion() << " tiempo anterior: " << prueba->getAnterior()<< endl;
-                                    cout << estacionAmodificar->getNombreEstacion() << "tiempo siguiente: " << estacionAmodificar->getSiguiente() <<endl;*/
                                     break;
                                 }
                                 else if(opcionMenuUbicaion == 2){
@@ -164,7 +188,7 @@ int main(){
                                     linea->agregarEstacionFinal(nombreEstacion, false, tAnterior, 0);
 
                                     estacionModificar->setTsiguiente(tAnterior);
-                                    cout << "la estacion se agrego exitosamente";
+                                    cout << "la estacion se agrego exitosamente\n";
                                     break;
                                 }
                                 else{
@@ -180,10 +204,10 @@ int main(){
                                         Estacion* estacionAnterior = linea->getObjetoEstacion2(opcionEstaciones);
                                         Estacion* estacionSiguiente = linea->getObjetoEstacion2(opcionEstaciones + 1);
 
-                                        cout << "Ingrese el tiempo de la estacion " << estacionAnterior->getNombreEstacion() << " a " << nombreEstacion;
+                                        cout << "Ingrese el tiempo de la estacion " << estacionAnterior->getNombreEstacion() << " a " << nombreEstacion << ": ";
                                         cin >> tAnterior;
 
-                                        cout << "Ingrese el timepo de la estacion " << nombreEstacion << " a " << estacionSiguiente->getNombreEstacion();
+                                        cout << "Ingrese el tiempo de la estacion " << nombreEstacion << " a " << estacionSiguiente->getNombreEstacion() << ": ";
                                         cin >> tSiguiente;
 
                                         //Actualizo los tiempos de las estaciones
@@ -300,7 +324,7 @@ int main(){
 
                                         //Arego la estacion
                                         linea->ampliarListaEstaciones();
-                                        linea->agregarEstacionInicio(nombreEstacion, false, tAnterior, tSiguiente);
+                                        linea->agregarEstacionMedio(nombreEstacion, false, tAnterior, tSiguiente, estacionAnterior->getNombreEstacion());
 
                                         cout << "La estacion se agrego exitosamente\n";
 
@@ -315,7 +339,40 @@ int main(){
                     }
                 }
                 else if(opcionMenuLinea == 2){//Elimnar estacion
-                    cout << "Elminar estacion";
+                    if(r1.getCantLineas()!= 0){
+                        cout <<"Ingresa el nombre de la linea en donde quieres eliminar la estacion\n";
+                        r1.listarLineas();
+                        string nombreLinea = r1.verificarLinea2();
+
+                        Linea* linea = r1.getObjetoLinea(nombreLinea);
+
+                        if(linea->getCantEstaciones() != 0){
+
+                            linea->listarEstaciones();
+                            cout <<"Ingresa la opcion de la estacion a eliminar: ";
+                            int posicion;
+                            cin >> posicion;
+
+                            //traemos el nombre de la estacion
+                            string nombreEstacion = linea->nombreEstacionEliminar(posicion);
+                            Estacion* estacion = linea->getObjetoEstacion(nombreEstacion);
+
+                            if(estacion->getEsTransicion()){
+                                cout << "No se puede eliminar una estacion de transicion\n";
+                            }else{
+                                //metodo eliminar estacion
+                                linea->eliminarEstacion(posicion);
+                                cout << "Estacion eliminada con exito\n";
+                            }
+                        }else{
+                            cout << "ADVERTENCIA: No hay estaciones en la linea, ingresa al menos una.\n";
+
+                        }
+
+                    }
+                    else{
+                        cout << "ADVERTENCIA: no hay lineas en la red\n";
+                    }
                 }
 
                 else if(opcionMenuLinea == 3){//Estaciones en una linea

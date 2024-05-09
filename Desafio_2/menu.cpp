@@ -18,7 +18,8 @@ void Menu::menuRed(){
     cout << "2. Eliminar una linea de la red Metro\n";
     cout << "3. Saber cuantas lineas tiene la red Metro\n";
     cout << "4. Saber cuantas estaciones tiene la red Metro\n";
-    cout << "5. Volver al menu principal\n";
+    cout << "5. Simulacion de la red\n";
+    cout << "6. Volver al menu principal\n";
 }
 
 void Menu::menuLinea(){

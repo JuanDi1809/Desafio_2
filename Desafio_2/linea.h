@@ -14,7 +14,7 @@ private:
 
 public:
     Linea(const string&); //Constructor
-    //~Linea(); //Destructor
+    ~Linea(); //Destructor
 
     //Getters
     string getNombreLinea();
@@ -49,13 +49,17 @@ public:
     void agregarEstacionMedio(const string&, bool, int, int, const string&);
 
     //Metodo para eliminar linea
-    void eliminarEstacion(); //Toca verificar que no sea de transicion y actualizar tiempos
+    void eliminarEstacion(int); //Toca verificar que no sea de transicion y actualizar tiempos
+    string nombreEstacionEliminar(int posicion);
 
     //Metodo para listar estaciones
     void listarEstaciones();
 
     //Metodo para listar las estaciones de a pares
     void listarEstaciones2();
+
+    //Metodo para saber el tiempo entre dos estaciones
+    int tiempoEstaciones(const string&, const string&);
 };
 
 #endif // LINEA_H

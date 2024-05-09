@@ -8,14 +8,9 @@ using namespace std;
 
 Linea::Linea(const string& _nombreLinea): nombreLinea(_nombreLinea), listaEstaciones(nullptr), cantEstaciones(0) {}
 
-/*
+
 Linea::~Linea(){
-    for(int i = 0; i < cantEstaciones; i++){
-        delete listaEstaciones[i];
-    }
-    delete[] listaEstaciones;
 }
-*/
 
 string Linea::getNombreLinea(){
     return nombreLinea;
@@ -116,18 +111,71 @@ void Linea::agregarEstacionFinal(const string& nombreEstacion, bool esTransicion
     cantEstaciones++;
 }
 
-/*
+
 void Linea::agregarEstacionMedio(const string& nombreEstacion, bool esTransicion, int tAnterior, int tSiguiente, const string& nombreAnterior){
-    for(int i = 0; i <= cantEstaciones; i++){
-        if(listaEstaciones[i]->getNombreEstacion() == nombreAnterior){
-            Estacion* temp = listaEstaciones[i + 1];
-            listaEstaciones[i+1] = new Estacion(nombreEstacion,esTransicion, tAnterior, tSiguiente);
+    Estacion **copiaEstacion = new Estacion*[cantEstaciones];
+
+    int i;
+    for(i = 0; i <= cantEstaciones; i++){
+        copiaEstacion[i] = new Estacion(*listaEstaciones[i]); // Copiar las estaciones existentes
+        if (listaEstaciones[i]->getNombreEstacion() == nombreAnterior) {
+            copiaEstacion[i + 1] = new Estacion(nombreEstacion, esTransicion, tAnterior, tSiguiente);
+            break;
+        }
+        listaEstaciones[i] = copiaEstacion[i];
+    }
+
+    for(int j = i + 2; j < cantEstaciones; j++){
+        copiaEstacion[j] = new Estacion(*listaEstaciones[j]);
+    }
+
+    // Liberar la memoria de las estaciones existentes
+    for (int k = 0; k < cantEstaciones; k++) {
+        delete listaEstaciones[k];
+    }
+
+    delete[] listaEstaciones;
+
+    listaEstaciones = copiaEstacion;
+    cantEstaciones++;
+}
+
+
+string Linea::nombreEstacionEliminar(int posicion){
+    return listaEstaciones[posicion-1]->getNombreEstacion();
+}
+
+void Linea::eliminarEstacion(int numero){
+    Estacion **copiaEstacion = new Estacion*[cantEstaciones];
+    int tiempoEliminadoAnteior, tiempoEliminadoSiguiente;
+
+    int posEstacion;
+    for(int i = 0; i < cantEstaciones; i++){
+        if(i == numero-1){
+            //esta iteracion se salta y ademas se toman los tiempos
+            posEstacion = i;
+            tiempoEliminadoAnteior = listaEstaciones[i]->getAnterior();
+            tiempoEliminadoSiguiente = listaEstaciones[i]->getSiguiente();
+            copiaEstacion[i] = listaEstaciones[i+1];
+        }else{
+            copiaEstacion[i] = listaEstaciones[i];
         }
     }
-}
-*/
 
-void Linea::eliminarEstacion(){
+    delete[] listaEstaciones;
+    listaEstaciones = copiaEstacion;
+
+    //actualizacion de tiempos
+    if(numero-1 == 0){
+        listaEstaciones[0]->setTanterior(0);
+    }else if(numero == cantEstaciones){
+        listaEstaciones[cantEstaciones - 1]->setTsiguiente(0);
+    }else{
+        listaEstaciones[posEstacion]->setTanterior(tiempoEliminadoAnteior + tiempoEliminadoSiguiente); //se cambia el tiempo anterior de la estacion siguiente
+        listaEstaciones[posEstacion-1]->setTsiguiente(tiempoEliminadoAnteior + tiempoEliminadoSiguiente); //se cambia el tiempo siguiente de la estacion anterior
+    }
+
+     cantEstaciones--;
 
 }
 
@@ -163,6 +211,7 @@ string Linea::getEstacionInicial(){
 string Linea::getEstacionFinal(){
     return listaEstaciones[cantEstaciones - 1]->getNombreEstacion();
 }
+
 bool Linea::getEstacionTransicion(){
     for(int i = 0; i < cantEstaciones; i++){
         if(listaEstaciones[i]->getEsTransicion()){
@@ -170,5 +219,23 @@ bool Linea::getEstacionTransicion(){
         }
     }
     return false;
+}
+
+int Linea::tiempoEstaciones(const string& estacion1, const string& estacion2){
+
+    int i, tTotal = 0;
+    for(i = 0; i < cantEstaciones; i++){
+        if(listaEstaciones[i]->getNombreEstacion() == estacion1) break;
+    }
+
+    for(int j = i; j < cantEstaciones; j++){
+        if(listaEstaciones[j]->getNombreEstacion() == estacion2){
+            break;
+        }
+        else{
+            tTotal += listaEstaciones[j]->getSiguiente();
+        }
+    }
+    return tTotal;
 }
 
